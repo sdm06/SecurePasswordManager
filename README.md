@@ -45,7 +45,7 @@ SecureVault uses industry-standard cryptographic primitives:
 
 ```bash
 # 1. Clone the repository
-git clone [https://github.com/YOUR_USERNAME/SecureVault.git](https://github.com/YOUR_USERNAME/SecureVault.git)
+git clone https://github.com/sdm06/SecurePasswordManager.git
 cd SecureVault
 
 # 2. Restore dependencies
