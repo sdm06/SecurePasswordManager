@@ -1,0 +1,117 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SecureVault.Linux.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
+        x:Class="SecureVault.Linux.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="SECURE VAULT"
+        Width="400" Height="600"
+        WindowStartupLocation="CenterScreen"
+        Background="Black"
+        Foreground="White"
+        FontFamily="Monospace">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </Window.Styles>
+
+    <Panel>
+        <Grid IsVisible="{Binding !IsLoggedIn}" RowDefinitions="Auto,Auto,Auto,Auto" VerticalAlignment="Center" Margin="40">
+            <TextBlock Grid.Row="0" Text="[ LOCKED ]" FontSize="30" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+            <TextBlock Grid.Row="1" Text="{Binding StatusMessage}" Foreground="Red" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+            <TextBox Grid.Row="2" Text="{Binding MasterPassword}" PasswordChar="#" Watermark="ENTER PASSWORD" Margin="0,0,0,20"/>
+            <Button Grid.Row="3" Command="{Binding ExecuteAuthCommand}" Content="{Binding ButtonText}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+        </Grid>
+
+        <Grid IsVisible="{Binding IsLoggedIn}" RowDefinitions="Auto, *, Auto" Margin="20">
+            
+            <TextBlock Grid.Row="0" Text="/// SECURE_VAULT ///" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+            <ListBox Grid.Row="1" ItemsSource="{Binding PasswordList}" SelectedItem="{Binding SelectedEntry}" Background="Black" BorderBrush="White" BorderThickness="1" Margin="0,0,0,20">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text=">" Foreground="White"/>
+                            <TextBlock Text="{Binding ServiceName}" FontWeight="Bold" Width="140" Foreground="White"/>
+                            <TextBlock Text="{Binding Username}" Foreground="Gray"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Grid.Row="2" Spacing="10">
+                
+                <Border BorderBrush="White" BorderThickness="1" Padding="10" Background="#111111">
+                    <TextBlock Text="{Binding RevealedPassword}" 
+                               HorizontalAlignment="Center" 
+                               FontSize="16" 
+                               FontWeight="Bold"
+                               Foreground="#00FF00"/> 
+                </Border>
+
+                <Grid ColumnDefinitions="*, 10, *, 10, *">
+                    
+                    <Button Grid.Column="0" 
+                            Content="SHOW / HIDE" 
+                            Command="{Binding TogglePasswordCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            HorizontalContentAlignment="Center"/>
+                    
+                    <Button Grid.Column="2" 
+                            Content="COPY" 
+                            Click="CopyButton_OnClick" 
+                            HorizontalAlignment="Stretch" 
+                            HorizontalContentAlignment="Center"/>
+
+                    <Button Grid.Column="4" 
+                            Content="DELETE" 
+                            Command="{Binding DeletePasswordCommand}" 
+                            HorizontalAlignment="Stretch" 
+                            HorizontalContentAlignment="Center"
+                            Foreground="Red"
+                            BorderBrush="Red"/>
+                </Grid>
+
+                <TextBlock Text="{Binding StatusMessage}" Foreground="Cyan" HorizontalAlignment="Center"/>
+
+                <Separator Height="2" Background="White" Margin="0,10"/>
+                
+                <TextBlock Text="[ ADD NEW ENTRY ]" FontWeight="Bold" HorizontalAlignment="Center"/>
+                
+                <Grid ColumnDefinitions="*, *, 2*, Auto" RowDefinitions="Auto" ShowGridLines="False">
+                    <TextBox Grid.Column="0" Text="{Binding NewServiceName}" Watermark="SERVICE" Margin="0,0,5,0"/>
+                    <TextBox Grid.Column="1" Text="{Binding NewUsername}" Watermark="USER" Margin="0,0,5,0"/>
+                    <TextBox Grid.Column="2" Text="{Binding NewPassword}" Watermark="PASS" PasswordChar="#"/>
+                    
+                    <Button Grid.Column="3" Content="GEN" Command="{Binding GeneratePasswordCommand}" Margin="5,0,0,0"/>
+                </Grid>
+
+                <Button Content="SAVE TO DATABASE" Command="{Binding AddPasswordCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Panel>
+</Window>

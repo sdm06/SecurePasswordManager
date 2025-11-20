@@ -1,0 +1,16 @@
+# .NET Build Folders
+bin/
+obj/
+
+# Database files (NEVER COMMIT THESE)
+*.db
+*.db-shm
+*.db-wal
+*.salt
+*.check
+
+# User specific files
+.idea/
+.vscode/
+*.user
+*.suo
